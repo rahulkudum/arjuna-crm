@@ -1,0 +1,311 @@
+import React, { useContext, useEffect, useState } from "react";
+
+import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+import ResponsiveDrawer from "./ui/drawer";
+
+const useStyles = makeStyles((theme) => ({
+ root: {
+  display: "flex",
+ },
+ root2: {
+  flexGrow: 1,
+ },
+
+ content: {
+  flexGrow: 1,
+  padding: theme.spacing(3),
+ },
+ toolbar: theme.mixins.toolbar,
+ formControl: {
+  margin: theme.spacing(1),
+  minWidth: 120,
+ },
+ backdrop: {
+  zIndex: theme.zIndex.drawer + 1,
+  color: "#fff",
+ },
+}));
+
+function OrderList() {
+ const classes = useStyles();
+
+ const [orderList, setOrderList] = useState([]);
+ const [start, setStart] = useState(0);
+ const [backdrop, setBackdrop] = useState(false);
+
+ useEffect(() => {
+  setBackdrop(true);
+  axios
+   .get("http://localhost:5000/payment")
+   .then((res) => {
+    console.log(res.data);
+    setOrderList(res.data);
+    setBackdrop(false);
+   })
+   .catch((err) => {
+    console.log(err);
+   });
+ }, []);
+
+ function popup(val) {
+  console.log(val);
+ }
+
+ return (
+  <>
+   <Backdrop className={classes.backdrop} open={backdrop}>
+    <CircularProgress color="inherit" />
+   </Backdrop>
+   <div className={classes.root}>
+    <ResponsiveDrawer />
+
+    <main className={classes.content}>
+     <div className={classes.toolbar} />
+
+     <h3>Orders to be placed</h3>
+     <div class="table-responsive">
+      <table class="table table-striped table-hover table-bordered">
+       <thead class="table-success">
+        <tr>
+         <th scope="col">#</th>
+         <th scope="col">Name</th>
+         <th scope="col">Ph No</th>
+         <th scope="col">Email</th>
+         <th scope="col">Book</th>
+         <th scope="col">Amount</th>
+         <th scope="col">Date</th>
+         <th scope="col">Address</th>
+         <th scope="col">Place</th>
+        </tr>
+       </thead>
+       <tbody>
+        {orderList.map((val, i) => {
+         if (!val.process) {
+          return (
+           <tr>
+            <th
+             onClick={() => {
+              popup(val);
+             }}
+             scope="row"
+            >
+             {i + 1}
+            </th>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.name}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.phno}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.email}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.book}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.amount}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.date}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.address}
+            </td>
+
+            <td>
+             <button
+              type="button"
+              class="btn"
+              style={{ color: "blue" }}
+              onClick={() => {
+               setBackdrop(true);
+               axios
+                .post("http://localhost:5000/payment/process", { id: val._id })
+                .then((res) => {
+                 console.log(res);
+                 setOrderList((prev) => {
+                  let dum = [...prev];
+                  dum[i].process = true;
+                  return dum;
+                 });
+                 setBackdrop(false);
+                })
+                .catch((err) => console.log(err));
+              }}
+             >
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check-all" viewBox="0 0 16 16">
+               <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486-.943 1.179z" />
+              </svg>
+             </button>
+            </td>
+           </tr>
+          );
+         }
+        })}
+       </tbody>
+      </table>
+     </div>
+     <h3>Placed orders</h3>
+     <div class="table-responsive">
+      <table class="table table-striped table-hover table-bordered">
+       <thead class="table-success">
+        <tr>
+         <th scope="col">#</th>
+         <th scope="col">Name</th>
+         <th scope="col">Ph No</th>
+         <th scope="col">Email</th>
+         <th scope="col">Book</th>
+         <th scope="col">Amount</th>
+         <th scope="col">Date</th>
+         <th scope="col">Address</th>
+        </tr>
+       </thead>
+       <tbody>
+        {orderList.map((val, i) => {
+         if (val.process) {
+          return (
+           <tr>
+            <th
+             onClick={() => {
+              popup(val);
+             }}
+             scope="row"
+            >
+             {i + 1}
+            </th>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.name}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.phno}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.email}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.book}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.amount}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.date}
+            </td>
+            <td
+             onClick={() => {
+              popup(val);
+             }}
+            >
+             {val.address}
+            </td>
+           </tr>
+          );
+         }
+        })}
+       </tbody>
+      </table>
+     </div>
+     <p style={{ textAlign: "center" }}>
+      <button
+       className="btn"
+       style={{ color: "blue" }}
+       onClick={() => {
+        if (start === 0) {
+         setStart(orderList.length - (orderList.length % 10));
+        } else {
+         setStart(start - 10);
+        }
+       }}
+      >
+       <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+        <path
+         fill-rule="evenodd"
+         d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
+        />
+       </svg>
+      </button>
+      Displaying {start + 1} - {start + 10 > orderList.length ? orderList.length : start + 10} of {orderList.length}{" "}
+      <button
+       className="btn"
+       style={{ color: "blue" }}
+       onClick={() => {
+        if (start + 10 > orderList.length) {
+         setStart(0);
+        } else {
+         setStart(start + 10);
+        }
+       }}
+      >
+       <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-right-square" viewBox="0 0 16 16">
+        <path
+         fill-rule="evenodd"
+         d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
+        />
+       </svg>
+      </button>
+     </p>
+    </main>
+   </div>
+  </>
+ );
+}
+
+export default OrderList;

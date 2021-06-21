@@ -1426,7 +1426,7 @@ function Webinar(props) {
          console.log(currentWebinar._id, currentWebinar.webinarid);
 
          axios
-          .post("https://arjunadb.herokuapp.com/webinar/addusers", {
+          .post("http://localhost:5000/webinar/addusers", {
            id: currentWebinar._id,
            wid: currentWebinar.webinarid,
            eid: currentWebinar.institute,

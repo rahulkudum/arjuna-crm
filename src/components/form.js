@@ -1,58 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-
+import "./form.css";
+import iseminar from "./images/arjuna_logo.png";
+import iceo from "./images/ceo.png";
+import iposter from "./images/webinar_poster.jpeg";
+import iceo1 from "./images/ceo1.JPG";
+import ilogo from "./images/arjunalogowithmotto.jpg";
 import { Switch, Route, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import axios from "axios";
-import Grid from "@material-ui/core/Grid";
+import Carousel from "react-material-ui-carousel";
 
-import { makeStyles } from "@material-ui/core/styles";
-
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import { Facebook, LinkedIn, Mail, Telegram, Twitter, WhatsApp, YouTube } from "@material-ui/icons";
-import { Button } from "@material-ui/core";
-
-import Accordion from "@material-ui/core/Accordion";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import Menu from "@material-ui/icons/Menu";
-import { ListItem, ListItemIcon } from "@material-ui/core";
-import { List, Menu as Dropdown, MenuItem } from "@material-ui/core";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
-import { Typography } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
- root: {
-  flexGrow: 1,
- },
- root2: {
-  width: "100%",
-  zIndex: 3,
- },
- heading: {
-  fontSize: theme.typography.pxToRem(15),
-  flexBasis: "33.33%",
-  flexShrink: 0,
- },
- secondaryHeading: {
-  fontSize: theme.typography.pxToRem(15),
-  color: theme.palette.text.secondary,
- },
-}));
-
-const breakPoints = [
- { width: 1, itemsToShow: 1 },
- { width: 550, itemsToShow: 2, itemsToScroll: 2 },
- { width: 768, itemsToShow: 3 },
- { width: 1200, itemsToShow: 4 },
-];
 
 function Form(props) {
- const classes = useStyles();
- let history = useHistory();
- let { path, url } = useRouteMatch();
  let { webinarId } = useParams();
 
+ let { path, url } = useRouteMatch();
  const [webinar, setWebinar] = useState({});
  const [name, setName] = useState("");
  const [number, setNumber] = useState();
@@ -60,31 +22,16 @@ function Form(props) {
  const [email, setEmail] = useState("");
  const [gender, setGender] = useState("");
  const [role, setRole] = useState("");
- const [newStudent, setNewStudent] = useState("");
- const [done, setDone] = useState(false);
+ const [newStudent, setNewStudent] = useState("new");
+ const [done, setDone] = useState(true);
  const [id, setId] = useState("");
  const [deviceType, setDeviceType] = useState("mobile");
  const [part, setPart] = useState({ email: "", gender: "", role: "", dob: "" });
  const [menu, setMenu] = useState(false);
- const [keyboard, setKeyboard] = useState(false);
-
- const [anchorEl, setAnchorEl] = useState(null);
 
  const responsive = {
-  desktop: {
-   breakpoint: { max: 3000, min: 1024 },
-   items: 5,
-   slidesToSlide: 4, // optional, default to 1.
-   partialVisibilityGutter: 40,
-  },
-  tablet: {
-   breakpoint: { max: 1024, min: 600 },
-   items: 2,
-   slidesToSlide: 2, // optional, default to 1.
-   partialVisibilityGutter: 30,
-  },
   mobile: {
-   breakpoint: { max: 600, min: 0 },
+   breakpoint: { max: 3000, min: 0 },
    items: 1,
    slidesToSlide: 1, // optional, default to 1.
    partialVisibilityGutter: 30,
@@ -95,14 +42,20 @@ function Form(props) {
   axios
    .post("https://arjunadb.herokuapp.com/webinar/find", { webinarid: webinarId })
    .then((res) => {
-    console.log(res.data, webinarId);
-    setWebinar(res.data);
+    axios
+     .post("https://arjunadb.herokuapp.com/pwebinar/find", { webinarid: res.data.webinarid })
+     .then((res2) => {
+      res.data.pwebinar = res2.data;
+      setWebinar(res.data);
+     })
+     .catch((err) => console.log(err));
    })
    .catch((err) => console.log(err));
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
   var forms = document.querySelectorAll(".needs-validation");
 
   // Loop over them and prevent submission
+
   Array.prototype.slice.call(forms).forEach(function (form) {
    form.addEventListener(
     "submit",
@@ -117,187 +70,167 @@ function Form(props) {
     false
    );
   });
-
-  if (window.screen.width >= 1024) {
-   setDeviceType("desktop");
-  } else if (window.screen.width >= 600) {
-   setDeviceType("tablet");
-  }
  }, []);
-
- useEffect(() => {
-  if (done) {
-   var vid = document.getElementById("myVideo");
-   if (vid) {
-    vid.autoplay = true;
-    vid.load();
-   }
-  }
- }, [done]);
 
  return (
   <Switch>
    <Route exact path={path}>
-    {!done ? (
-     <Grid container>
-      <Grid item style={{ textAlign: "center", margin: "auto", padding: "0" }} item xs={12} xl={6} lg={6} md={6} sm={12}>
-       <img className="poster" src={`https://res.cloudinary.com/arjunadb/image/upload/webinar_posters/${webinarId}`} />
-      </Grid>
+    <div className="dbody">
+     <header>
+      <div className="header-row1">
+       <img src={iseminar} className="brand-logo" alt="Arjuna Logo" />
+       <div>
+        <Mail style={{ fontSize: "60px", margin: "20px" }} />
+        <Facebook style={{ fontSize: "60px", color: "blue", margin: "20px" }} />
+        <YouTube style={{ fontSize: "60px", color: "red", margin: "20px" }} />
+       </div>
+      </div>
+     </header>
+     <section className="coverpage-sec">
+      {/* <img src="./images/seminar.jpg" className="coverpage-img" alt="" /> */}
+      <div className="coverpage-sec__preacher-webinar-det">
+       <div className="coverpage-sec__ambassador-img">
+        <img src={iceo} alt="" />
+       </div>
+       <div className="coverpage-sec__webinar-det">
+        <h1 className="coverpage-sec__webinar-det__series-name">Parivartan Series</h1>
+        <h2 className="coverpage-sec__webinar-det__title">{webinar.pwebinar ? webinar.pwebinar.name : "webinar"}</h2>
+        <h3 className="coverpage-sec__webinar-det__sub-title">A Student's opportunity to build resilience</h3>
+        <h3 className="coverpage-sec__webinar-det__preacher-name">By Amal M Das</h3>
+       </div>
+      </div>
 
-      <Grid item xs={12} xl={6} lg={6} md={6} sm={12} style={{ margin: "0", padding: "0" }}>
-       <div className="page3">
-        <div className="form-head">
-         <p style={{ position: "absolute", top: "50%", left: "50%", transform: "translateX(-50%) translateY(-50%)" }}>Registration</p>
-        </div>
+      <div className="coverpage-sec__reg-div">
+       {!done ? (
+        <>
+         {!newStudent ? (
+          <form
+           noValidate
+           className="coverpage-sec__reg-form needs-validation 1"
+           onSubmit={(e) => {
+            e.preventDefault();
 
-        {!newStudent ? (
-         <form
-          noValidate
-          className="needs-validation 1"
-          onSubmit={(e) => {
-           e.preventDefault();
-
-           axios
-            .post("https://arjunadb.herokuapp.com/user/find", { number: Number(number) })
-            .then((res) => {
-             if (res.data) {
-              axios
-               .post("https://arjunadb.herokuapp.com/user/webinaradd", {
-                id: res.data._id,
-                webinarid: webinar._id,
-               })
-               .then((res) => {
-                if (!res.data) alert("You have already registered for this webinar");
-                if (res.data.email === "" || res.data.dob === "" || res.data.role === "" || res.data.gender === "") {
-                 setId(res.data._id);
-                 setEmail(res.data.email);
-                 setDob(res.data.dob);
-                 setGender(res.data.gender);
-                 setRole(res.data.role);
-                 part.email = res.data.email;
-                 part.gender = res.data.gender;
-                 part.role = res.data.role;
-                 part.dob = res.data.dob;
-                 setNewStudent("part");
-                } else {
-                 setDone(true);
-                }
-               })
-               .catch((err) => console.log(err));
-             } else setNewStudent("new");
-            })
-            .catch((err) => console.log(err));
-          }}
-         >
-          <div className="div-signin">
-           <p>Thank you for your interest!</p>
-           {keyboard && deviceType === "mobile" ? null : <p>Kindly fill out this short registration form to be updated about our events.</p>}
-          </div>
-          <main className="form-signin">
-           <input
-            type="text"
-            className="form-control name"
-            placeholder="Name"
-            value={name}
-            required
-            id="defaultFormRegisterNameEx"
-            onChange={(e) => setName(e.target.value)}
-            onFocus={() => setKeyboard(true)}
-            onBlur={() => setKeyboard(false)}
-           />
-           <div class="invalid-feedback">Name should not be empty</div>
-           <br />
-
-           <input
-            type="text"
-            className="form-control name"
-            placeholder="Mobile Number"
-            value={number}
-            pattern="^[0-9]{10}$"
-            required
-            id="defaultFormRegisterNumberEx"
-            onChange={(e) => setNumber(e.target.value)}
-            onFocus={() => setKeyboard(true)}
-            onBlur={() => setKeyboard(false)}
-           />
-           <div class="invalid-feedback">Mobile Number is not valid!</div>
-          </main>
-
-          <button className="btn-form" submit autoFocus>
-           Submit
-          </button>
-         </form>
-        ) : (
-         <form
-          noValidate
-          className="needs-validation 2"
-          onSubmit={(e) => {
-           e.preventDefault();
-
-           if (newStudent === "new") {
             axios
-             .post("https://arjunadb.herokuapp.com/user/add", {
-              name: name,
-              number: number,
-              email: email,
-              dob: dob,
-              gender: gender,
-              role: role,
-              webinarid: webinar._id,
-             })
+             .post("https://arjunadb.herokuapp.com/user/find", { number: Number(number) })
              .then((res) => {
-              console.log(res.data);
-              setDone(true);
+              if (res.data) {
+               axios
+                .post("https://arjunadb.herokuapp.com/user/webinaradd", {
+                 id: res.data._id,
+                 webinarid: webinar._id,
+                })
+                .then((res) => {
+                 if (!res.data) alert("You have already registered for this webinar");
+                 if (res.data.email === "" || res.data.dob === "" || res.data.role === "" || res.data.gender === "") {
+                  setId(res.data._id);
+                  setEmail(res.data.email);
+                  setDob(res.data.dob);
+                  setGender(res.data.gender);
+                  setRole(res.data.role);
+                  part.email = res.data.email;
+                  part.gender = res.data.gender;
+                  part.role = res.data.role;
+                  part.dob = res.data.dob;
+                  setNewStudent("part");
+                 } else {
+                  setDone(true);
+                 }
+                })
+                .catch((err) => console.log(err));
+              } else setNewStudent("new");
              })
-
              .catch((err) => console.log(err));
-           } else if (newStudent === "part") {
-            axios
-             .post("https://arjunadb.herokuapp.com/user/updateadd", {
-              id: id,
-              email: email,
-              dob: dob,
-              gender: gender,
-              role: role,
-              webinarid: webinar._id,
-             })
-             .then((res) => {
-              console.log(res.data);
-              setDone(true);
-             })
+           }}
+          >
+           <h2>Register Now</h2>
+           <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" value={name} required id="defaultFormRegisterNameEx" onChange={(e) => setName(e.target.value)} />
+            <div className="invalid-feedback">Name should not be empty</div>
+           </div>
 
-             .catch((err) => console.log(err));
-           }
-          }}
-         >
-          <div className="div-signin">
-           {newStudent === "new" ? <p>Looks like this is your first ARJUNA webinar!</p> : <p>Looks like some of your details are missing</p>}
-           {deviceType === "mobile" && keyboard ? null : <p>By filling out the below details, you can receive updates about our events</p>}
-          </div>
-          <main className="form-signin">
+           <div>
+            <label for="phone">Phone Number</label>
+            <input
+             type="text"
+             name="phone"
+             value={number}
+             pattern="^[0-9]{10}$"
+             required
+             id="defaultFormRegisterNumberEx"
+             onChange={(e) => setNumber(e.target.value)}
+            />
+            <div className="invalid-feedback">Phone Number is not valid!</div>
+           </div>
+
+           <button id="form-submit" submit>
+            Submit
+           </button>
+          </form>
+         ) : (
+          <form
+           noValidate
+           className="coverpage-sec__reg-form needs-validation 2"
+           onSubmit={(e) => {
+            e.preventDefault();
+
+            if (newStudent === "new") {
+             axios
+              .post("https://arjunadb.herokuapp.com/user/add", {
+               name: name,
+               number: number,
+               email: email,
+               dob: dob,
+               gender: gender,
+               role: role,
+               webinarid: webinar._id,
+              })
+              .then((res) => {
+               console.log(res.data);
+               setDone(true);
+              })
+
+              .catch((err) => console.log(err));
+            } else if (newStudent === "part") {
+             axios
+              .post("https://arjunadb.herokuapp.com/user/updateadd", {
+               id: id,
+               email: email,
+               dob: dob,
+               gender: gender,
+               role: role,
+               webinarid: webinar._id,
+              })
+              .then((res) => {
+               console.log(res.data);
+               setDone(true);
+              })
+
+              .catch((err) => console.log(err));
+            }
+           }}
+          >
+           <div>
+            {newStudent === "new" ? <p>Looks like this is your first ARJUNA webinar!</p> : <p>Looks like some of your details are missing</p>}
+            <p>By filling out the below details, you can receive updates about our events</p>
+           </div>
+
            {newStudent === "new" || (newStudent === "part" && part.email === "") ? (
-            <>
-             {" "}
-             <input
-              type="email"
-              className="form-control name"
-              placeholder="E-mail"
-              id="defaultFormRegisterEmailEx"
-              value={email}
-              required
-              onChange={(e) => setEmail(e.target.value)}
-              onFocus={() => setKeyboard(true)}
-              onBlur={() => setKeyboard(false)}
-             />
-             <div class="invalid-feedback">Email is not valid!</div>
-             <br />
-            </>
+            <div style={{ width: "90%", marginBottom: "10px" }}>
+             <label for="email" style={{ display: "block" }}>
+              E-mail
+             </label>
+             <input type="email" name="email" id="defaultFormRegisterEmailEx" value={email} required onChange={(e) => setEmail(e.target.value)} />
+
+             <div className="invalid-feedback">Email is not valid!</div>
+            </div>
            ) : null}
 
            {newStudent === "new" || (newStudent === "part" && part.gender === "") ? (
-            <>
+            <div style={{ width: "90%", margin: "10px" }}>
              <select
               className="form-select"
+              style={{ width: "95%" }}
               id="inputGroupSelect01"
               onChange={(e) => {
                setGender(e.target.value);
@@ -309,14 +242,14 @@ function Form(props) {
               <option value="Male">Male</option>
               <option value="Female">Female</option>
              </select>
-             <br />
-            </>
+            </div>
            ) : null}
 
            {newStudent === "new" || (newStudent === "part" && part.role === "") ? (
-            <>
+            <div style={{ width: "90%", margin: "10px" }}>
              <select
               className="form-select"
+              style={{ width: "95%" }}
               id="inputGroupSelect01"
               onChange={(e) => {
                setRole(e.target.value);
@@ -330,233 +263,185 @@ function Form(props) {
               <option value="parent">Parent</option>
               <option value="working professional">Working Professional</option>
              </select>
-             <br />
-            </>
+            </div>
            ) : null}
 
            {newStudent === "new" || (newStudent === "part" && part.dob === "") ? (
-            <>
+            <div style={{ width: "90%" }}>
+             <label for="dob" style={{ display: "block" }}>
+              Date of Birth
+             </label>
              <input
               type="text"
-              className="form-control name"
-              placeholder="Date of Birth: dd/mm/yyyy"
+              name="dob"
+              placeholder="dd/mm/yyyy"
               value={dob}
               id="defaultFormRegisterdobEx"
               pattern="^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$"
               onChange={(e) => setDob(e.target.value)}
-              onFocus={() => setKeyboard(true)}
-              onBlur={() => setKeyboard(false)}
              />
-             <div class="invalid-feedback">Valid format for Date of Birth: dd/mm/yyyy</div>
-            </>
-           ) : null}
-          </main>
-          <button className="btn-form" submit autoFocus>
-           Submit
-          </button>
-         </form>
-        )}
-       </div>
-      </Grid>
-     </Grid>
-    ) : (
-     <>
-      <div class="video-container">
-       <div className="nav-bar">
-        <Accordion
-         expanded={menu}
-         onChange={() => {
-          setMenu(!menu);
-         }}
-         style={{ zIndex: "4", backgroundColor: "#1F1B24" }}
-        >
-         <AccordionSummary expandIcon={<Menu style={{ color: "pink" }} />} aria-controls="panel1bh-content" id="panel1bh-header">
-          <Typography style={{ color: "pink" }}>ARJUNA GROUP</Typography>
-         </AccordionSummary>
-         <AccordionDetails>
-          <List style={{ textAlign: "center", width: "100%" }} component="nav">
-           <ListItem button>
-            <ListItemText style={{ textAlign: "center", color: "pink" }} primary="WEBINARS" />
-           </ListItem>
-           <ListItem button>
-            <ListItemText style={{ textAlign: "center", color: "pink" }} primary="COURSES" />
-           </ListItem>
-
-           <ListItem button>
-            <ListItemText style={{ textAlign: "center", color: "pink" }} primary="ABOUT" />
-           </ListItem>
-           <Divider style={{ color: "pink" }} />
-           <ListItem>
-            <div style={{ textAlign: "center", width: "100%" }}>
-             <ListItemIcon button>
-              <Mail style={{ fontSize: "40px", color: "pink", margin: "10px" }} />
-             </ListItemIcon>
-             <ListItemIcon>
-              <Facebook style={{ fontSize: "40px", color: "pink", margin: "10px" }} />
-             </ListItemIcon>
-             <ListItemIcon>
-              <WhatsApp style={{ fontSize: "40px", color: "pink", margin: "10px" }} />
-             </ListItemIcon>
-             <ListItemIcon>
-              <YouTube style={{ fontSize: "40px", color: "pink", margin: "10px" }} />
-             </ListItemIcon>
+             <div className="invalid-feedback">Valid format for Date of Birth: dd/mm/yyyy</div>
+             <br />
             </div>
-           </ListItem>
-          </List>
-         </AccordionDetails>
-        </Accordion>
-       </div>
-
-       <div className="video-overlay"></div>
-
-       <div className="icons-overlay">
-        <Button style={{ fontSize: "20px", color: "white", margin: "10px" }}>WEBINARS</Button>
-        <Button style={{ fontSize: "20px", color: "white", margin: "10px" }}>COURSES</Button>
-        <Button style={{ fontSize: "20px", color: "white", margin: "10px" }}>ABOUT</Button>
-
-        <Mail style={{ fontSize: "40px", color: "pink", margin: "10px" }} />
-        <Facebook style={{ fontSize: "40px", color: "pink", margin: "10px" }} />
-        <WhatsApp style={{ fontSize: "40px", color: "pink", margin: "10px" }} />
-        {/* <LinkedIn style={{ fontSize: "80px", color: "pink" }} />
-        <Twitter style={{ fontSize: "80px", color: "pink" }} />
-        <Telegram style={{ fontSize: "80px", color: "pink" }} /> */}
-        <YouTube style={{ fontSize: "40px", color: "pink", margin: "10px" }} />
-       </div>
-
-       <div className="text-overlay">
-        <h1>Thank You</h1>
-        <p>We hope that you will take maximum benifit from our webinars and fly with colours in every aspect of our life</p>
-        <a href="https://www.studentthinkbox.com/" class="btn-sample-pink">
-         Visit our website
-        </a>
-        <button
-         className="btn-sample-blue"
-         onClick={(e) => {
-          setAnchorEl(e.currentTarget);
-         }}
-        >
-         Add to calendar
-        </button>
-
-        <Dropdown
-         id="simple-menu"
-         anchorEl={anchorEl}
-         keepMounted
-         open={Boolean(anchorEl)}
-         onClose={() => {
-          setAnchorEl(null);
-         }}
-        >
-         <MenuItem
-          onClick={() => {
-           setAnchorEl(null);
-          }}
+           ) : null}
+           <button id="form-submit" submit>
+            Submit
+           </button>
+          </form>
+         )}
+        </>
+       ) : (
+        <form action="" className="coverpage-sec__reg-form">
+         <div>
+          <h2 style={{ textAlign: "center" }}>Thank You</h2>
+          <p style={{ maxWidth: "400px" }}>We hope that you will take maximum benifit from our webinars and fly with colours in every aspect of our life</p>
+         </div>
+         <a href="https://www.studentthinkbox.com/" class="btn-sample-pink">
+          Website
+         </a>
+         <a
+          href={`https://calendar.google.com/calendar/r/eventedit?text=testing+event&dates=20211208T170000/20211208T200000&details=chant+and+be+happy&location=Zoom`}
+          className="btn-sample-blue"
          >
-          <a
-           href={`https://calendar.google.com/calendar/r/eventedit?text=testing+event&dates=20211208T170000/20211208T200000&details=chant+and+be+happy&location=Zoom`}
-          >
-           Google Calendar
-          </a>
-         </MenuItem>
+          Calendar
+         </a>
+         <Carousel>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=1vWZGzKlt8M">
+            <img src="https://img.youtube.com/vi/1vWZGzKlt8M/0.jpg" />
+           </a>
+          </div>
 
-         <MenuItem
-          onClick={() => {
-           setAnchorEl(null);
-          }}
-         >
-          <a href={`https://arjunadb.herokuapp.com/webinar/ical`}>Other Calendars (.ics)</a>
-         </MenuItem>
-        </Dropdown>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=OKUYNoex6Ag">
+            <img src="https://img.youtube.com/vi/OKUYNoex6Ag/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=QHfD72Z9-uA">
+            <img src="https://img.youtube.com/vi/QHfD72Z9-uA/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=V7Ftxz-ytcE">
+            <img src="https://img.youtube.com/vi/V7Ftxz-ytcE/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=c_1lo50AVVU">
+            <img src="https://img.youtube.com/vi/c_1lo50AVVU/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=wcmiFAvITtU">
+            <img src="https://img.youtube.com/vi/wcmiFAvITtU/0.jpg" />
+           </a>
+          </div>
+
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=EvLTYvj0Vto">
+            <img src="https://img.youtube.com/vi/EvLTYvj0Vto/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=nNnFg92mmGo">
+            <img src="https://img.youtube.com/vi/nNnFg92mmGo/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=jQidcUBKGBI">
+            <img src="https://img.youtube.com/vi/jQidcUBKGBI/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=1SKWtBH7s8M">
+            <img src="https://img.youtube.com/vi/1SKWtBH7s8M/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=Ghkx3ZP07Uc">
+            <img src="https://img.youtube.com/vi/Ghkx3ZP07Uc/0.jpg" />
+           </a>
+          </div>
+          <div className="crop">
+           <a href="https://www.youtube.com/watch?v=6qBa_0SSdN4">
+            <img src="https://img.youtube.com/vi/6qBa_0SSdN4/0.jpg" />
+           </a>
+          </div>
+         </Carousel>
+        </form>
+       )}
+      </div>
+     </section>
+
+     <section className="key-learnings-sec">
+      <div className="key-learnings-sec__det">
+       <h1 className="key-learnings-sec__heading">Key Learnings</h1>
+       {/* <h3 className="key-learnings-sec__sub-heading">from this webinar</h3> */}
+
+       <ul>
+        <li>Convert Failures into Life-changing Opportunities.</li>
+        <li>Improve Focus and Concentration power.</li>
+        <li>Learn Authentic and Ethical Living.</li>
+        <li>Explore Leadership Qualities by taking ownership.</li>
+        <li>Goal Setting with Success roadmap design.</li>
+       </ul>
+      </div>
+      <div className="key-learnings-sec__img-div">
+       <img src={`https://res.cloudinary.com/arjunadb/image/upload/webinar_posters/${webinarId}`} alt="books image" className="key-learnings-sec__img" />
+      </div>
+     </section>
+
+     <section className="ceo-sec">
+      <div className="ceo-sec__det">
+       <h2 className="ceo-sec__sub-heading">Who is</h2>
+       <h1 className="ceo-sec__heading">Amal M Das?</h1>
+
+       <ul>
+        <li>Bestselling Author of books like "The Art of Concentration", "Time Management for students", and "Parenting Teenagers for wholesome success"</li>
+        <li>Motivational speaker, invited to top institutes like IIT BHU, IIT K, IIT M, IIT Indore, IIIT Vadodara</li>
+        <li>Influenced over 3 Lakh senior secondary students in India overe 12 years</li>
+        <li>Founder and CEO of ARJUNA Group Trust</li>
+       </ul>
+      </div>
+      <div className="ceo-sec__img-div">
+       {/* <img src="./images/mandala_ceo.png" alt="" className="ceo-sec__mandala-img" /> */}
+       <img src={iceo1} alt="" className="ceo-sec__ceo-img" />
+      </div>
+     </section>
+
+     <section className="about-sec">
+      <div className="about-sec__head-div">
+       <h2 className="about-sec__sub-heading">About</h2>
+       <h1 className="about-sec__heading">Arjuna Group Trust</h1>
+      </div>
+      <div className="about-sec__body-div">
+       <div className="about-sec__body-div__det">
+        <ul>
+         <li>World's Greatest Influencers, International Motivational Speaker, Leadership Consultant & Business Coach.</li>
+         <li>Owner of World’s No #1 Most Subscribed Entrepreneurship YouTube Channel with more than 16.2 million Subscribers</li>
+         <li>Learn Authentic and Ethical Living.</li>
+         <li>Explore Leadership Qualities by taking ownership.</li>
+         <li>Goal Setting with Success roadmap design.</li>
+        </ul>
        </div>
-       <video
-        preload
-        autoplay
-        muted
-        loop
-        id="myVideo"
-        src="https://res.cloudinary.com/arjunadb/video/upload/v1621491362/Real_Self_Confidence___Discover_the_Power_of_a_Selfless_Purpose___Amal_M_Das_pj8iww.mp4"
-       ></video>
+       <div className="about-sec__body-div__img-div">
+        <img src={ilogo} alt="" className="about-sec__body-div__about-img" />
+       </div>
       </div>
-      <div className="carousel-wrapper">
-       <Carousel
-        className="carousel"
-        showDots={true}
-        responsive={responsive}
-        ssr={true} // means to render carousel on server-side.
-        infinite={true}
-        autoPlay={true}
-        autoPlaySpeed={2000}
-        keyBoardControl={true}
-        customTransition="all .5"
-        transitionDuration={100}
-        deviceType={deviceType}
-       >
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=1vWZGzKlt8M">
-          <img src="https://img.youtube.com/vi/1vWZGzKlt8M/0.jpg" />
-         </a>
-        </div>
+     </section>
 
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=OKUYNoex6Ag">
-          <img src="https://img.youtube.com/vi/OKUYNoex6Ag/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=QHfD72Z9-uA">
-          <img src="https://img.youtube.com/vi/QHfD72Z9-uA/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=V7Ftxz-ytcE">
-          <img src="https://img.youtube.com/vi/V7Ftxz-ytcE/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=c_1lo50AVVU">
-          <img src="https://img.youtube.com/vi/c_1lo50AVVU/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=wcmiFAvITtU">
-          <img src="https://img.youtube.com/vi/wcmiFAvITtU/0.jpg" />
-         </a>
-        </div>
+     <section></section>
+     <footer>
+      <p>© ARJUNA Group Trust 2021. All Rights Reserved.</p>
 
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=EvLTYvj0Vto">
-          <img src="https://img.youtube.com/vi/EvLTYvj0Vto/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=nNnFg92mmGo">
-          <img src="https://img.youtube.com/vi/nNnFg92mmGo/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=jQidcUBKGBI">
-          <img src="https://img.youtube.com/vi/jQidcUBKGBI/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=1SKWtBH7s8M">
-          <img src="https://img.youtube.com/vi/1SKWtBH7s8M/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=Ghkx3ZP07Uc">
-          <img src="https://img.youtube.com/vi/Ghkx3ZP07Uc/0.jpg" />
-         </a>
-        </div>
-        <div className="crop">
-         <a href="https://www.youtube.com/watch?v=6qBa_0SSdN4">
-          <img src="https://img.youtube.com/vi/6qBa_0SSdN4/0.jpg" />
-         </a>
-        </div>
-       </Carousel>
-      </div>
-     </>
-    )}
+      {/* <nav>
+     <p>About</p>
+     <p>Terms and Conditions</p>
+     <p>Contact</p>
+    </nav> */}
+     </footer>
+    </div>
    </Route>
   </Switch>
  );

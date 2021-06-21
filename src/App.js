@@ -7,6 +7,7 @@ import Webinar from "./components/webinar";
 
 import User from "./components/user";
 import Institute from "./components/institute";
+import OrderList from "./components/order";
 import logo from "./logo.png";
 import { AdminName, AdminPhoto } from "./components/context/storage";
 import Form from "./components/form";
@@ -26,7 +27,7 @@ function App() {
       <main className="form-login">
        <img className="mb-4" src={logo} alt="" />
        <GoogleLogin
-        clientId="526565895378-j84bo6ihpva6rdiibbui7rmsltuhe6qj.apps.googleusercontent.com"
+        clientId="526565895378-md97pueiv8m2t3c682eamv293tt4gaa6.apps.googleusercontent.com"
         // vercel 526565895378-j84bo6ihpva6rdiibbui7rmsltuhe6qj.apps.googleusercontent.com
         // arjunafe 526565895378-0u79l74057grs0n8ekqaa1kvb3htt3ej.apps.googleusercontent.com
         // localhost 526565895378-md97pueiv8m2t3c682eamv293tt4gaa6.apps.googleusercontent.com
@@ -58,6 +59,8 @@ function App() {
    <Route path="/webinar">{name ? <Webinar /> : <Redirect to="/" />}</Route>
    <Route path="/student">{name ? <User /> : <Redirect to="/" />}</Route>
    <Route path="/institute">{name ? <Institute /> : <Redirect to="/" />}</Route>
+   <Route path="/order">{name ? <OrderList /> : <Redirect to="/" />}</Route>
+
    <Route path="/form/:webinarId">
     <Form />
    </Route>
