@@ -1532,7 +1532,7 @@ function Webinar(props) {
         <br />
         <p>Shortened link: {`https://tinyurl.com/arjuna${currentWebinar.date.slice(-2)}${currentWebinar._id.slice(-2)}`}</p>
         <p>
-         Orginal link: https://arjunaregistration.web.app/${currentWebinar._id}_${currentWebinar.pwebinar.name}-${currentWebinar.pwebinar.subtitle}&$
+         Orginal link: https://arjunaregistration.web.app/{currentWebinar._id}_{currentWebinar.pwebinar.name}-{currentWebinar.pwebinar.subtitle}&
          {currentWebinar.pwebinar.series}
         </p>
        </>
