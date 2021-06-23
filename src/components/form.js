@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./form.css";
 import iseminar from "./images/arjuna_logo.png";
 import iceo from "./images/ceo.png";
-import iposter from "./images/webinar_poster.jpeg";
+
 import iceo1 from "./images/ceo1.JPG";
 import ilogo from "./images/arjunalogowithmotto.jpg";
 import { Switch, Route, useHistory, useParams, useRouteMatch } from "react-router-dom";

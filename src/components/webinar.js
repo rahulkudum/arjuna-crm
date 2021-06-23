@@ -85,11 +85,10 @@ function Webinar(props) {
  const [currentWebinarNo, setCurrentWebinarNo] = useState([]);
  const [webinarName, setWebinarName] = useState("");
  const [webinarId, setWebinarId] = useState("");
- const [webinarPname, setWebinarPname] = useState("");
- const [webinarDescription, setWebinarDescription] = useState("");
- const [webinarLevel, setWebinarLevel] = useState("");
+ const [pwebinar, setPwebinar] = useState({ name: "", subtitle: "", series: "parivartan", description: "" });
  const [speakerName, setSpeakerName] = useState("");
  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+ const [time, setTime] = useState("");
  const [guest, setGuest] = useState("");
  const [instituteId, setInstituteId] = useState("");
  const [image, setImage] = useState("");
@@ -795,17 +794,18 @@ function Webinar(props) {
 
       <form className={classes.container} noValidate>
        <TextField
-        id="date"
-        label="Date"
-        type="date"
-        defaultValue={new Date().toISOString().slice(0, 10)}
+        id="datetime-local"
+        label="Date and Time"
+        type="datetime-local"
+        defaultValue={new Date().toISOString(0, 16)}
         className={classes.textField}
         InputLabelProps={{
          shrink: true,
         }}
         onChange={(e) => {
          console.log(e.target.value);
-         setDate(e.target.value);
+         setDate(e.target.value.slice(0, 10));
+         setTime(e.target.value.slice(11, 16));
         }}
        />
       </form>
@@ -829,6 +829,7 @@ function Webinar(props) {
           webinarid: webinarId,
           speaker: speakerName,
           date: date,
+          time: time,
           guest: guest,
           institute: instituteId,
          })
@@ -861,7 +862,7 @@ function Webinar(props) {
                   .post(
                    "https://api.tinyurl.com/create",
                    {
-                    url: `https://arjunafe.herokuapp.com/form/${res.data._id}`,
+                    url: `https://arjunaregistration.web.app/${res.data._id}_${res2.data.name}-${res2.data.subtitle}&${res2.data.series}`,
                     domain: "tinyurl.com",
                     alias: `arjuna${date.slice(-2)}${res.data._id.slice(-2)}`,
                    },
@@ -1170,31 +1171,63 @@ function Webinar(props) {
       <TextField
        autoFocus
        margin="dense"
-       label="Webinar Name"
+       label="Title"
        type="text"
-       value={webinarPname}
+       value={pwebinar.name}
        onChange={(e) => {
-        setWebinarPname(e.target.value);
+        setPwebinar((prev) => {
+         let dum = { ...prev };
+         dum.name = e.target.value;
+         return dum;
+        });
        }}
        fullWidth
       />
+      <TextField
+       margin="dense"
+       label="Sub Title"
+       type="text"
+       value={pwebinar.subtitle}
+       onChange={(e) => {
+        setPwebinar((prev) => {
+         let dum = { ...prev };
+         dum.subtitle = e.target.value;
+         return dum;
+        });
+       }}
+       fullWidth
+      />
+      <InputLabel id="demo-simple-select-standard-label">Series</InputLabel>
+      <Select
+       labelId="demo-simple-select-standard-label"
+       id="demo-simple-select-standard"
+       value={pwebinar.series}
+       onChange={(e) => {
+        setPwebinar((prev) => {
+         let dum = { ...prev };
+         dum.series = e.target.value;
+         return dum;
+        });
+       }}
+       label="Series"
+      >
+       <MenuItem value="Parivartan">Parivartan</MenuItem>
+       <MenuItem value="Santulan">Santulan</MenuItem>
+      </Select>
+
       <TextField
        margin="dense"
        label="Descrption"
        type="text"
-       value={webinarDescription}
+       multiline
+       rows={4}
+       value={pwebinar.description}
        onChange={(e) => {
-        setWebinarDescription(e.target.value);
-       }}
-       fullWidth
-      />
-      <TextField
-       margin="dense"
-       label="Level"
-       type="text"
-       value={webinarLevel}
-       onChange={(e) => {
-        setWebinarLevel(e.target.value);
+        setPwebinar((prev) => {
+         let dum = { ...prev };
+         dum.description = e.target.value;
+         return dum;
+        });
        }}
        fullWidth
       />
@@ -1213,9 +1246,10 @@ function Webinar(props) {
         setBackdrop(true);
         axios
          .post("https://arjunadb.herokuapp.com/pwebinar/add", {
-          name: webinarPname,
-          description: webinarDescription,
-          level: webinarLevel,
+          name: pwebinar.name,
+          subtitle: pwebinar.subtitle,
+          series: pwebinar.series,
+          description: pwebinar.description,
          })
          .then((res) => {
           setPwebinarList((prev) => {
@@ -1223,6 +1257,7 @@ function Webinar(props) {
            dum.push(res.data);
            return dum;
           });
+          setWebinarId(res._id);
           setBackdrop(false);
           setOpen4(false);
          })
@@ -1426,7 +1461,7 @@ function Webinar(props) {
          console.log(currentWebinar._id, currentWebinar.webinarid);
 
          axios
-          .post("http://localhost:5000/webinar/addusers", {
+          .post("https://arjunadb.herokuapp.com/webinar/addusers", {
            id: currentWebinar._id,
            wid: currentWebinar.webinarid,
            eid: currentWebinar.institute,
@@ -1496,7 +1531,10 @@ function Webinar(props) {
 
         <br />
         <p>Shortened link: {`https://tinyurl.com/arjuna${currentWebinar.date.slice(-2)}${currentWebinar._id.slice(-2)}`}</p>
-        <p>Orginal link: https://arjunafe.herokuapp.com/form/{currentWebinar._id}</p>
+        <p>
+         Orginal link: https://arjunaregistration.web.app/${currentWebinar._id}_${currentWebinar.pwebinar.name}-${currentWebinar.pwebinar.subtitle}&$
+         {currentWebinar.pwebinar.series}
+        </p>
        </>
       ) : null}
      </DialogContent>
