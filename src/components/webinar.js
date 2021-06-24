@@ -1219,8 +1219,9 @@ function Webinar(props) {
        margin="dense"
        label="Descrption"
        type="text"
+       variant="outlined"
        multiline
-       rows={4}
+       rows={5}
        value={pwebinar.description}
        onChange={(e) => {
         setPwebinar((prev) => {
@@ -1257,7 +1258,7 @@ function Webinar(props) {
            dum.push(res.data);
            return dum;
           });
-          setWebinarId(res._id);
+          setWebinarId(res.data._id);
           setBackdrop(false);
           setOpen4(false);
          })

@@ -10,7 +10,6 @@ import Institute from "./components/institute";
 import OrderList from "./components/order";
 import logo from "./logo.png";
 import { AdminName, AdminPhoto } from "./components/context/storage";
-import Form from "./components/form";
 
 function App() {
  let history = useHistory();
@@ -60,10 +59,6 @@ function App() {
    <Route path="/student">{name ? <User /> : <Redirect to="/" />}</Route>
    <Route path="/institute">{name ? <Institute /> : <Redirect to="/" />}</Route>
    <Route path="/order">{name ? <OrderList /> : <Redirect to="/" />}</Route>
-
-   <Route path="/form/:webinarId">
-    <Form />
-   </Route>
   </Switch>
  );
 }
