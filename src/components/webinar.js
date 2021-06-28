@@ -862,7 +862,7 @@ function Webinar(props) {
                   .post(
                    "https://api.tinyurl.com/create",
                    {
-                    url: `https://arjunaregistration.web.app/${res.data._id}_${res2.data.name}-${res2.data.subtitle}&${res2.data.series}`,
+                    url: `https://arjunaregistration.web.app/${res.data._id}_${res2.data.name}_${res2.data.subtitle}_${res2.data.series}_${res.data.date}_${res.data.time}`,
                     domain: "tinyurl.com",
                     alias: `arjuna${date.slice(-2)}${res.data._id.slice(-2)}`,
                    },
@@ -1533,8 +1533,8 @@ function Webinar(props) {
         <br />
         <p>Shortened link: {`https://tinyurl.com/arjuna${currentWebinar.date.slice(-2)}${currentWebinar._id.slice(-2)}`}</p>
         <p>
-         Orginal link: https://arjunaregistration.web.app/{currentWebinar._id}_{currentWebinar.pwebinar.name}-{currentWebinar.pwebinar.subtitle}&
-         {currentWebinar.pwebinar.series}
+         Orginal link: https://arjunaregistration.web.app/{currentWebinar._id}_{currentWebinar.pwebinar.name}_{currentWebinar.pwebinar.subtitle}_
+         {currentWebinar.pwebinar.series}_{currentWebinar.date}_{currentWebinar.time}
         </p>
        </>
       ) : null}
