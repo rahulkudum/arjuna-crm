@@ -342,6 +342,7 @@ function Webinar(props) {
              <button
               className="btn-sample-blue"
               onClick={(e) => {
+               setCurrentWebinar(val);
                setAnchorEl(e.currentTarget);
               }}
              >
@@ -366,14 +367,15 @@ function Webinar(props) {
                 className="btn"
                 style={{ color: "blue" }}
                 onClick={() => {
-                 setCurrentWebinar(val);
-                 var tempInput = document.createElement("input");
-                 tempInput.style = "position: absolute; left: -1000px; top: -1000px";
-                 tempInput.value = encodeURI(`https://tinyurl.com/arjuna${val.date.slice(-2)}${val._id.slice(-2)}`);
-                 document.body.appendChild(tempInput);
-                 tempInput.select();
-                 document.execCommand("copy");
-                 document.body.removeChild(tempInput);
+                 let text = encodeURI(`https://tinyurl.com/arjuna${currentWebinar.date.slice(-2)}${currentWebinar._id.slice(-2)}`);
+                 navigator.clipboard.writeText(text).then(
+                  function () {
+                   console.log("Async: Copying to clipboard was successful!");
+                  },
+                  function (err) {
+                   console.error("Async: Could not copy text: ", err);
+                  }
+                 );
 
                  setOpen7(true);
                 }}
@@ -399,7 +401,6 @@ function Webinar(props) {
 
                   return dum;
                  });
-                 setCurrentWebinar(val);
                  setOpenMail(true);
                 }}
                >
@@ -432,7 +433,7 @@ function Webinar(props) {
                 className="btn"
                 style={{ color: "green" }}
                 onClick={() => {
-                 const apiResources = val.users.map((user, j) => {
+                 const apiResources = currentWebinar.users.map((user, j) => {
                   return { id: user };
                  });
 
@@ -494,6 +495,7 @@ function Webinar(props) {
                     ...excelArray,
                    ]);
                    wb.Sheets["Registered Students"] = ws;
+
                    var wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
                    function s2ab(s) {
                     var buf = new ArrayBuffer(s.length);
@@ -797,7 +799,7 @@ function Webinar(props) {
         id="datetime-local"
         label="Date and Time"
         type="datetime-local"
-        defaultValue={new Date().toISOString(0, 16)}
+        defaultValue={new Date().toISOString().slice(0, 16)}
         className={classes.textField}
         InputLabelProps={{
          shrink: true,
@@ -2012,10 +2014,10 @@ function Webinar(props) {
          transports: ["websocket"],
         };
 
-        socketRef.current = io.connect("https://arjunadb.herokuapp.com", connectionOptions);
+        socketRef.current = io.connect("http://localhost:5000", connectionOptions);
 
         axios
-         .post("https://arjunadb.herokuapp.com/webinar/email", { details: mailDetails, webinarid: currentWebinar._id })
+         .post("http://localhost:5000/webinar/email", { details: mailDetails, webinarid: currentWebinar._id })
          .then((res) => {
           console.log(res);
          })

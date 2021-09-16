@@ -26,6 +26,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import ReceiptIcon from "@material-ui/icons/Receipt";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
 
 import { AdminName, AdminPhoto } from "../context/storage";
 
@@ -107,6 +108,17 @@ function ResponsiveDrawer(props) {
       <VideoLabelIcon />
      </ListItemIcon>
      <ListItemText primary={"Webinars"} />
+    </ListItem>
+    <ListItem
+     button
+     onClick={() => {
+      history.push("/book");
+     }}
+    >
+     <ListItemIcon>
+      <MenuBookIcon />
+     </ListItemIcon>
+     <ListItemText primary={"Books"} />
     </ListItem>
     <ListItem
      button

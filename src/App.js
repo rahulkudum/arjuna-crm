@@ -8,6 +8,7 @@ import Webinar from "./components/webinar";
 import User from "./components/user";
 import Institute from "./components/institute";
 import OrderList from "./components/order";
+import Book from "./components/book";
 import logo from "./logo.png";
 import { AdminName, AdminPhoto } from "./components/context/storage";
 
@@ -26,10 +27,10 @@ function App() {
       <main className="form-login">
        <img className="mb-4" src={logo} alt="" />
        <GoogleLogin
-        clientId="526565895378-0u79l74057grs0n8ekqaa1kvb3htt3ej.apps.googleusercontent.com"
-        // vercel 526565895378-j84bo6ihpva6rdiibbui7rmsltuhe6qj.apps.googleusercontent.com
+        clientId="526565895378-jbcgv3gtftmcftv7lonjn3qbue4raj62.apps.googleusercontent.com"
         // arjunafe 526565895378-0u79l74057grs0n8ekqaa1kvb3htt3ej.apps.googleusercontent.com
         // localhost 526565895378-md97pueiv8m2t3c682eamv293tt4gaa6.apps.googleusercontent.com
+        // arjuna-crm 526565895378-jbcgv3gtftmcftv7lonjn3qbue4raj62.apps.googleusercontent.com
         render={(renderProps) => (
          <button onClick={renderProps.onClick} className="btn btn-lg btn-primary">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
@@ -59,6 +60,7 @@ function App() {
    <Route path="/student">{name ? <User /> : <Redirect to="/" />}</Route>
    <Route path="/institute">{name ? <Institute /> : <Redirect to="/" />}</Route>
    <Route path="/order">{name ? <OrderList /> : <Redirect to="/" />}</Route>
+   <Route path="/book">{name ? <Book /> : <Redirect to="/" />}</Route>
   </Switch>
  );
 }
