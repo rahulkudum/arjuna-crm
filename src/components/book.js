@@ -111,7 +111,8 @@ function Book() {
         <tr>
          <th scope="col">#</th>
          <th scope="col">Name</th>
-         <th scope="col">Price</th>
+         <th scope="col">Book Page</th>
+
          <th scope="col">Delete</th>
         </tr>
        </thead>
@@ -134,13 +135,7 @@ function Book() {
            >
             {val.title}
            </td>
-           <td
-            onClick={() => {
-             popup(val);
-            }}
-           >
-            {val.price}
-           </td>
+           <td>{`https://arjuna-book.herokuapp.com/book/${val.title}`}</td>
            <td>
             <button
              type="button"
