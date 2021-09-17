@@ -248,6 +248,42 @@ function Book() {
     <Dialog fullWidth={true} maxWidth={"lg"} open={open1} onClose={() => {}} aria-labelledby="responsive-dialog-title">
      <DialogTitle id="responsive-dialog-title">{"Update the book"}</DialogTitle>
      <DialogContent>
+      <img src={currentBook.image} style={{ height: "300px" }} />
+      <Button
+       color="primary"
+       onClick={() => {
+        let uploaded = false;
+        window.cloudinary.openUploadWidget(
+         {
+          cloudName: "arjunadb",
+          uploadPreset: "arjunadb",
+          sources: ["local", "url", "image_search", "camera", "google_drive", "dropbox", "facebook", "instagram", "shutterstock"],
+          multiple: false,
+          cropping: true,
+          croppingShowDimensions: true,
+          croppingCoordinatesMode: "custom",
+          googleApiKey: "AIzaSyCEYCH1ZS1UH0C6QjWDxohAYcpRFFNyACc",
+          folder: "book_covers",
+         },
+         (error, result) => {
+          console.log(result);
+          if (result.event === "success") {
+           setCurrentBook((prev) => {
+            let dum = { ...prev };
+            dum.image = "https://res.cloudinary.com/arjunadb/image/upload/" + result.info.public_id;
+            return dum;
+           });
+          }
+          if ((result.info === "hidden" && !uploaded) || error) {
+           alert("uploading image failed");
+          }
+         }
+        );
+       }}
+      >
+       Change
+      </Button>
+      <br />
       <TextField
        autoFocus
        margin="dense"
