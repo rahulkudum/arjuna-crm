@@ -268,6 +268,7 @@ function Book() {
          (error, result) => {
           console.log(result);
           if (result.event === "success") {
+             uploaded=true;
            setCurrentBook((prev) => {
             let dum = { ...prev };
             dum.image = "https://res.cloudinary.com/arjunadb/image/upload/" + result.info.public_id;
@@ -586,6 +587,112 @@ function Book() {
        }}
        style={{ marginBottom: "40px" }}
       />
+      <br />
+       <TextField
+       margin="dense"
+       label="Amazon link"
+       type="text"
+       value={currentBook.amazon}
+       onChange={(e) => {
+        setCurrentBook((prev) => {
+         let dum = { ...prev };
+         dum.amazon = e.target.value;
+         return dum;
+        });
+       }}
+       style={{ marginBottom: "40px" }}
+      />
+      <br />
+       <TextField
+       margin="dense"
+       label="Youtube link"
+       type="text"
+       value={currentBook.youtube}
+       onChange={(e) => {
+        setCurrentBook((prev) => {
+         let dum = { ...prev };
+         dum.youtube = e.target.value;
+         return dum;
+        });
+       }}
+       style={{ marginBottom: "40px" }}
+      />
+      <br />
+      {currentBook.backimg1 ? <img src={currentBook.backimg1} style={{ height: "300px" }} /> : null}
+      <Button
+       color="primary"
+       onClick={() => {
+        let uploaded = false;
+        window.cloudinary.openUploadWidget(
+         {
+          cloudName: "arjunadb",
+          uploadPreset: "arjunadb",
+          sources: ["local", "url", "image_search", "camera", "google_drive", "dropbox", "facebook", "instagram", "shutterstock"],
+          multiple: false,
+          cropping: true,
+          croppingShowDimensions: true,
+          croppingCoordinatesMode: "custom",
+          googleApiKey: "AIzaSyCEYCH1ZS1UH0C6QjWDxohAYcpRFFNyACc",
+          folder: "back_images",
+         },
+         (error, result) => {
+          console.log(result);
+          if (result.event === "success") {
+            uploaded=true;
+           setCurrentBook((prev) => {
+            let dum = { ...prev };
+            dum.backimg1 = "https://res.cloudinary.com/arjunadb/image/upload/" + result.info.public_id;
+            return dum;
+           });
+          }
+          if ((result.info === "hidden" && !uploaded) || error) {
+           alert("uploading image failed");
+          }
+         }
+        );
+       }}
+      >
+       Change Background Image 1
+      </Button>
+      <br />
+      <br />
+      {currentBook.backimg2 ? <img src={currentBook.backimg2} style={{ height: "300px" }} /> : null}
+      <Button
+       color="primary"
+       onClick={() => {
+        let uploaded = false;
+        window.cloudinary.openUploadWidget(
+         {
+          cloudName: "arjunadb",
+          uploadPreset: "arjunadb",
+          sources: ["local", "url", "image_search", "camera", "google_drive", "dropbox", "facebook", "instagram", "shutterstock"],
+          multiple: false,
+          cropping: true,
+          croppingShowDimensions: true,
+          croppingCoordinatesMode: "custom",
+          googleApiKey: "AIzaSyCEYCH1ZS1UH0C6QjWDxohAYcpRFFNyACc",
+          folder: "back_images",
+         },
+         (error, result) => {
+          console.log(result);
+          if (result.event === "success") {
+             uploaded=true;
+           setCurrentBook((prev) => {
+            let dum = { ...prev };
+            dum.backimg2 = "https://res.cloudinary.com/arjunadb/image/upload/" + result.info.public_id;
+            return dum;
+           });
+          }
+          if ((result.info === "hidden" && !uploaded) || error) {
+           alert("uploading image failed");
+          }
+         }
+        );
+       }}
+      >
+       Change Background Image 2
+      </Button>
+      <br />
      </DialogContent>
      <DialogActions>
       <Button

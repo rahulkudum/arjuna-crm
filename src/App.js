@@ -41,10 +41,14 @@ function App() {
         )}
         onSuccess={(mail) => {
          console.log(mail);
-         setName(mail.profileObj.name);
-         setPhoto(mail.profileObj.imageUrl);
-         setAccess("access");
-         history.push("/webinar");
+         if (mail.profileObj.email === "rahulkudum@gmail.com") {
+          setName(mail.profileObj.name);
+          setPhoto(mail.profileObj.imageUrl);
+          setAccess("access");
+          history.push("/webinar");
+         } else {
+          alert("sorry you don't have access to this website");
+         }
         }}
         onFailure={(res) => {}}
         cookiePolicy={"single_host_origin"}

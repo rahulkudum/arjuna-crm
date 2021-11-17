@@ -96,7 +96,7 @@ function ResponsiveDrawer(props) {
      <ListItemIcon>
       <PeopleAltIcon />
      </ListItemIcon>
-     <ListItemText primary={"Students"} />
+     <ListItemText primary={"Customers"} />
     </ListItem>
     <ListItem
      button
