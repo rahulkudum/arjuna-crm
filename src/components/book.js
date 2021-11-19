@@ -51,6 +51,7 @@ function Book() {
 
  const [open, setOpen] = useState(false);
  const [open1, setOpen1] = useState(false);
+ const [count, setCount] = useState(0);
 
  useEffect(() => {
   setBackdrop(true);
@@ -58,13 +59,21 @@ function Book() {
    .get("https://arjunadb.herokuapp.com/book/")
    .then((res) => {
     setBookList(res.data);
-
-    setBackdrop(false);
+    axios
+     .get("https://arjunadb.herokuapp.com/book/getcount")
+     .then((resp) => {
+      setCount(resp.data.count);
+      setBackdrop(false);
+     })
+     .catch((err) => {
+      console.log(err);
+     });
    })
    .catch((err) => {
     console.log(err);
    });
  }, []);
+
  function popup(val) {
   if (val.chapters.length == 0) {
    val.chapters.push({ name: "", desc: "" });
@@ -99,6 +108,23 @@ function Book() {
          }}
         >
          Add Book
+        </button>
+       </Grid>
+       <Grid item xs={4}>
+        <button
+         className="w-100 btn btn-lg btn-success"
+         onClick={() => {
+          axios
+           .get("https://arjunadb.herokuapp.com/book/getcount")
+           .then((resp) => {
+            setCount(resp.data.count);
+           })
+           .catch((err) => {
+            console.log(err);
+           });
+         }}
+        >
+         Count:{count}
         </button>
        </Grid>
       </Grid>
@@ -268,7 +294,7 @@ function Book() {
          (error, result) => {
           console.log(result);
           if (result.event === "success") {
-             uploaded=true;
+           uploaded = true;
            setCurrentBook((prev) => {
             let dum = { ...prev };
             dum.image = "https://res.cloudinary.com/arjunadb/image/upload/" + result.info.public_id;
@@ -588,7 +614,7 @@ function Book() {
        style={{ marginBottom: "40px" }}
       />
       <br />
-       <TextField
+      <TextField
        margin="dense"
        label="Amazon link"
        type="text"
@@ -603,7 +629,7 @@ function Book() {
        style={{ marginBottom: "40px" }}
       />
       <br />
-       <TextField
+      <TextField
        margin="dense"
        label="Youtube link"
        type="text"
@@ -638,7 +664,7 @@ function Book() {
          (error, result) => {
           console.log(result);
           if (result.event === "success") {
-            uploaded=true;
+           uploaded = true;
            setCurrentBook((prev) => {
             let dum = { ...prev };
             dum.backimg1 = "https://res.cloudinary.com/arjunadb/image/upload/" + result.info.public_id;
@@ -676,7 +702,7 @@ function Book() {
          (error, result) => {
           console.log(result);
           if (result.event === "success") {
-             uploaded=true;
+           uploaded = true;
            setCurrentBook((prev) => {
             let dum = { ...prev };
             dum.backimg2 = "https://res.cloudinary.com/arjunadb/image/upload/" + result.info.public_id;
